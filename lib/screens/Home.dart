@@ -14,7 +14,6 @@ class _HomeState extends State<Home> {
   final _scrollController = ScrollController();
 
   int _currentMax = 10;
-  
 
   bool scrollModifier = false;
 
@@ -27,7 +26,6 @@ class _HomeState extends State<Home> {
     "https://images.unsplash.com/photo-1658867835488-611ad1af15cc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHw%3D&w=1000&q=80",
     "https://images.unsplash.com/photo-1658937632483-e3777b516549?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw3fHx8ZW58MHx8fHw%3D&w=1000&q=80",
     "https://images.unsplash.com/photo-1658856102291-74df9dd0c544?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&w=1000&q=80",
-    "",
     "https://images.unsplash.com/photo-1657299170964-205905bb0940?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxMXx8fGVufDB8fHx8&w=1000&q=80",
     "https://images.unsplash.com/photo-1658847412035-2ae0d3d5c364?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxMnx8fGVufDB8fHx8&w=1000&q=80",
     "https://images.unsplash.com/photo-1658859976257-325eb7ac5fce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8&w=1000&q=80",
@@ -99,12 +97,10 @@ class _HomeState extends State<Home> {
   
   int _limit = 100;
 
-  List<Widget> testBoxed = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    testBoxed = List<Widget>.generate(100, (index) => CBox(text: (index).toString()));
     _limit = linkList.length;
     if(!_scrollController.hasClients){
       _getMoreImages();
@@ -159,7 +155,6 @@ class _HomeState extends State<Home> {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Text("${linkList.length}"),
           GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               mainAxisSpacing: 10,
@@ -170,19 +165,21 @@ class _HomeState extends State<Home> {
             shrinkWrap: true,
             itemCount: _currentMax,
             itemBuilder: ((context, index){
-              return CachedNetworkImage(
-                imageUrl: linkList[index],
-                imageBuilder: ((context, imageProvider){
-                  return GestureDetector(
-                    onTap: (){
-                      context.goNamed("image", extra: linkList[index]);
-                    },
-                    child: Image(image: imageProvider, fit: BoxFit.cover)
-                  );
-                }),
-                placeholder: ((context, url) => CBox()),
-                errorWidget: ((context, url, item) => Image.asset("assets/jpg/erorr-image.jpg", fit: BoxFit.cover)),
-              );
+                return CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  imageUrl: linkList[index],
+                  placeholder: ((context, url) => Container()),
+                  imageBuilder: ((context, imageProvider){
+                    return GestureDetector(
+                      onTap: () => context.goNamed("image", extra: linkList[index]),
+                      child: Image(image: imageProvider, fit: BoxFit.cover),
+                    );
+                  }),
+                  errorWidget: ((context, url, e) {
+                    return Image.asset("assets/jpg/erorr-image.jpg", fit: BoxFit.cover);
+                    }
+                  )
+                );
             })
           ),
           scrollModifier?
@@ -199,25 +196,6 @@ class _HomeState extends State<Home> {
           Container()
         ],
       ),
-    );
-  }
-}
-
-class CBox extends StatelessWidget {
-  const CBox({Key? key, this.text}) : super(key: key);
-  final String? text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.amber,
-      width: 100,
-      height: 100,
-      child: 
-      text == null?
-      null
-      :
-      Center(child: Text("$text")),
     );
   }
 }
