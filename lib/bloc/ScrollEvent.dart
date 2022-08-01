@@ -7,5 +7,6 @@ class FastLoadScrollEvent extends ScrollEvent{}
 
 class ModifierScrollEvent extends ScrollEvent{
   final bool modifier;
+
   ModifierScrollEvent(this.modifier);
 }

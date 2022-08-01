@@ -1,6 +1,7 @@
 import 'package:andromotest/BackList.dart';
 import 'package:andromotest/bloc/ScrollEvent.dart';
 import 'package:andromotest/bloc/ScrollState.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ScrollBloc extends Bloc<ScrollEvent, ScrollState>{
@@ -8,11 +9,32 @@ class ScrollBloc extends Bloc<ScrollEvent, ScrollState>{
     on<UpdateScrollEvent>(_updateList);
     on<FastLoadScrollEvent>(_fastLoad);
     on<ModifierScrollEvent>(_modifierList);
+    if(!scrollController.hasClients){
+      _fastLoad(FastLoadScrollEvent(), emit);
+    }
+    scrollController.addListener(() {
+      if(scrollController.position.pixels == scrollController.position.maxScrollExtent
+        && currentMax < BackList.linkList.length
+        && scrollModifier == true){
+          _updateList(UpdateScrollEvent(), emit);
+      }
+      if(scrollController.position.pixels < scrollController.position.maxScrollExtent - 50
+        && scrollModifier == true){
+          _modifierList(ModifierScrollEvent(false), emit);
+      }
+      if(scrollController.position.pixels == scrollController.position.maxScrollExtent
+        && scrollModifier == false){
+          _modifierList(ModifierScrollEvent(true), emit);
+      }
+    });
   }
-  
+
+  final scrollController = ScrollController();
+  bool scrollModifier = false;
   int currentMax = 10;
 
   void _modifierList(ModifierScrollEvent event, emit){
+    scrollModifier = true;
     emit(ScrollState(
       currentMax: currentMax,
       modifier: event.modifier,

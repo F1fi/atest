@@ -1,5 +1,4 @@
 import 'package:andromotest/BackList.dart';
-import 'package:andromotest/bloc/ScrollEvent.dart';
 import 'package:andromotest/bloc/ScrollBloc.dart';
 import 'package:andromotest/bloc/ScrollState.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -16,49 +15,16 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  final _scrollController = ScrollController();
-
-  int _currentMax = 10;
-
-  bool scrollModifier = false;
-
-  @override
-  void initState() {
-    super.initState();
-    final int limit = BackList.linkList.length;
-    if(!_scrollController.hasClients){
-      BlocProvider.of<ScrollBloc>(context).add(FastLoadScrollEvent());
-      _currentMax = _currentMax + 10;
-    }
-    _scrollController.addListener(() {
-      if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent
-        && _currentMax < limit
-        && scrollModifier == true){
-          BlocProvider.of<ScrollBloc>(context).add(UpdateScrollEvent());
-          _currentMax = _currentMax + 10;
-      }
-      if(_scrollController.position.pixels < _scrollController.position.maxScrollExtent - 50
-        && scrollModifier == true){
-          scrollModifier = false;
-          BlocProvider.of<ScrollBloc>(context).add(ModifierScrollEvent(scrollModifier));
-      }
-      if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent
-        && scrollModifier == false){
-          scrollModifier = true;
-          BlocProvider.of<ScrollBloc>(context).add(ModifierScrollEvent(scrollModifier));
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      controller: _scrollController,
-      child: BlocBuilder<ScrollBloc, ScrollState>(
-        builder: (context, state){
-          return Column(
+    return BlocBuilder<ScrollBloc, ScrollState>(
+      builder: (context, state){
+        return SingleChildScrollView(
+          controller: BlocProvider.of<ScrollBloc>(context).scrollController,
+          child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
+              Text("${state.currentMax}"),
               GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   mainAxisSpacing: 10,
@@ -100,9 +66,9 @@ class _HomeState extends State<Home> {
               ):
               Container()
             ],
-          );
-        }
-      ),
+          ),
+        );
+      }
     );
   }
 }
