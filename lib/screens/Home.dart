@@ -32,19 +32,16 @@ class _HomeState extends State<Home> {
       if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent
         && _currentMax < limit
         && scrollModifier == true){
-          print("add more");
           BlocProvider.of<ScrollBloc>(context).add(UpdateScrollEvent());
           _currentMax = _currentMax + 10;
       }
       if(_scrollController.position.pixels < _scrollController.position.maxScrollExtent - 100
         && scrollModifier == true){
-          print("remove modifier");
           scrollModifier = false;
           BlocProvider.of<ScrollBloc>(context).add(ModifierScrollEvent(scrollModifier));
       }
       if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent
         && scrollModifier == false){
-          print("add modifier");
           scrollModifier = true;
           BlocProvider.of<ScrollBloc>(context).add(ModifierScrollEvent(scrollModifier));
       }
