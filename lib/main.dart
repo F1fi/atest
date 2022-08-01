@@ -1,5 +1,7 @@
+import 'package:andromotest/bloc/ScrollBloc.dart';
 import 'package:andromotest/routes/Routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
@@ -24,13 +26,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routeInformationParser: _router.routeInformationParser,
-      routerDelegate: _router.routerDelegate,
-      routeInformationProvider: _router.routeInformationProvider,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return BlocProvider(
+      create: (BuildContext context) => ScrollBloc(),
+      child: MaterialApp.router(
+        routeInformationParser: _router.routeInformationParser,
+        routerDelegate: _router.routerDelegate,
+        routeInformationProvider: _router.routeInformationProvider,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
       ),
     );
   }
