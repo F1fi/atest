@@ -24,7 +24,6 @@ class _HomeState extends State<Home> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Text("${state.currentMax}"),
               GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   mainAxisSpacing: 10,
