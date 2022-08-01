@@ -27,6 +27,7 @@ class _HomeState extends State<Home> {
     final int limit = BlocProvider.of<ScrollBloc>(context).linkList.length;
     if(!_scrollController.hasClients){
       BlocProvider.of<ScrollBloc>(context).add(FastLoadScrollEvent());
+      _currentMax = _currentMax + 10;
     }
     _scrollController.addListener(() {
       if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent
@@ -35,7 +36,7 @@ class _HomeState extends State<Home> {
           BlocProvider.of<ScrollBloc>(context).add(UpdateScrollEvent());
           _currentMax = _currentMax + 10;
       }
-      if(_scrollController.position.pixels < _scrollController.position.maxScrollExtent - 100
+      if(_scrollController.position.pixels < _scrollController.position.maxScrollExtent - 50
         && scrollModifier == true){
           scrollModifier = false;
           BlocProvider.of<ScrollBloc>(context).add(ModifierScrollEvent(scrollModifier));

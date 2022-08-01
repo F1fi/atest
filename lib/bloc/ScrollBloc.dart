@@ -104,8 +104,8 @@ class ScrollBloc extends Bloc<ScrollEvent, ScrollState>{
     await _callMoreImages();
     emit(ScrollState(
       currentMax: currentMax,
-      modifier: true,
-      loading: false
+      modifier: false,
+      loading: currentMax < linkList.length
     ));
   }
   
