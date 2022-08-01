@@ -34,7 +34,7 @@ class ScrollBloc extends Bloc<ScrollEvent, ScrollState>{
   int currentMax = 10;
 
   void _modifierList(ModifierScrollEvent event, emit){
-    scrollModifier = true;
+    scrollModifier = event.modifier;
     emit(ScrollState(
       currentMax: currentMax,
       modifier: event.modifier,
@@ -74,7 +74,7 @@ class ScrollBloc extends Bloc<ScrollEvent, ScrollState>{
   }
 
   Future<void> _callMoreImages() async{
-    await Future.delayed(const Duration(milliseconds: 800));
+    await Future.delayed(const Duration(seconds: 1));
     _getMoreImages();
   }
   
