@@ -1,3 +1,4 @@
+import 'package:andromotest/BackList.dart';
 import 'package:andromotest/bloc/ScrollEvent.dart';
 import 'package:andromotest/bloc/ScrollBloc.dart';
 import 'package:andromotest/bloc/ScrollState.dart';
@@ -24,7 +25,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    final int limit = BlocProvider.of<ScrollBloc>(context).linkList.length;
+    final int limit = BackList.linkList.length;
     if(!_scrollController.hasClients){
       BlocProvider.of<ScrollBloc>(context).add(FastLoadScrollEvent());
       _currentMax = _currentMax + 10;
@@ -68,7 +69,7 @@ class _HomeState extends State<Home> {
                 shrinkWrap: true,
                 itemCount: state.currentMax,
                 itemBuilder: ((context, index){
-                    List<String> list = BlocProvider.of<ScrollBloc>(context).linkList;
+                    List<String> list = BackList.linkList;
                     return CachedNetworkImage(
                       fit: BoxFit.cover,
                       imageUrl: list[index],
